@@ -1,21 +1,33 @@
 <?php
 
 /**
- * サムネイル作成
- * 引数 ファイル名 , 元画像dir, 保存先dir, 画像サイズ
+ *画像サイズ比率計算関数 引数 ファイル名
+ *@param string $file_name
+ *@return array [$img_size,$thumb_width,$thumb_height]
  */
-function imgCompress($file_name)
-{
-    //◎画像サイズを取得 + dir指定
+function imgSize($file_name){
+        //◎画像サイズを取得 + dir指定
     $img_size = getimagesize('img/' . $file_name);
     // 圧縮比率 h×w 100:150 + hxw指定
     if ($img_size[1] / 100 > $img_size[0] / 150) {
         $thumb_width = $img_size[0] / ($img_size[1] / 100);
         $thumb_height = $img_size[1] / ($img_size[1] / 100);
+        return [$img_size,intval($thumb_width),intval($thumb_height)];
     } else {
         $thumb_height = $img_size[1] / ($img_size[0] / 150);
         $thumb_width = $img_size[0] / ($img_size[0] / 150);
+        return [$img_size,intval($thumb_width),intval($thumb_height)];
     }
+}
+/**
+ * サムネイル作成
+ * 引数 ファイル名 , 元画像dir, 保存先dir, 画像サイズ
+ * @param string $filename
+ * @param int $img_size
+ * @param int $thumb_width, $thumb_height
+ */
+function imgCompress($file_name,$img_size,$thumb_width,$thumb_height)
+{
     // 拡張子によって圧縮方法変更
     $ext = str_replace('image/', '', $_FILES['file']['type']);
     if ($ext === 'jpeg') {
@@ -35,7 +47,7 @@ function imgCompress($file_name)
         default:
             break;
     }
-    $img_out = ImageCreateTruecolor(intval($thumb_width), intval($thumb_height));
+    $img_out = ImageCreateTruecolor($thumb_width,$thumb_height);
     // pngのみ透過等がある為設定
     if ($ext === 'png') {
         imagealphablending($img_out, false);

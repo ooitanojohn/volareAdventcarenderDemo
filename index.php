@@ -2,24 +2,31 @@
 // 定数
 require_once '../../const.php';
 // sql関連
-require_once 'model/sql/sql.php';
-$link = sqlLink();
+require_once 'model/sql/SQL.php';
+// img関連
+require_once 'model/img/FILES.php';
+require_once 'model/img/IMG.php';
+// CRUD インスタンス作成
+$CRUD = new CRUD();
+// FILES インスタンス作成
+// $FILES = new FILES($_FILES);
+// IMG　インスタンス作成
+$IMG = new IMG($_FILES);
 // 一覧表示
-$imgList = sqlRead($link);
+$imgList = $CRUD->sqlRead();
 // ボタン送信
 if (isset($_POST['submit'])) {
-    //日本語に変更
-    require_once 'model/img/jpEncode.php';
-    $file_name = jpEncode($_FILES['file']['name']);
-    $file_name = $_FILES['file']['name'];
+    //日本語に変更 PDOでは不要
+    //$_FILES['file']['name'] = $IMG->jpEncode();
     // 投稿
-    sqlCreate($link, $_POST['msg'], $file_name);
+    $CRUD->sqlCreate($_POST['msg'], $_FILES['file']['name']);
     // ファイルアップロード
-    require_once 'model/img/uploadFile.php';
-    if (uploadFile($file_name)) {
+    if ($IMG->uploadFile()) {
         // サムネイル作成
-        require_once 'model/img/imgCompress.php';
-        imgCompress($file_name);
+        // 画像サイズを指定
+        list($imgSize,$thumb_width,$thumb_height) = $IMG->ImgSize();
+        // 圧縮コピー処理
+        $IMG->imgCompress($imgSize,$thumb_width,$thumb_height);
     }
     header('Location:index.php');
     exit;

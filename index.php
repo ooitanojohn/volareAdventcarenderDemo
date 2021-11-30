@@ -1,28 +1,31 @@
 <?php
+
 // 定数
 require_once '../../const.php';
 // sql関連
 require_once 'model/sql/sql.php';
-$link = sqlLink();
+// img関連
+require_once 'model/img/filesImg.php';
+// CRUD インスタンス作成
+$link = new CRUD();
+// FILES インスタンス作成
+$FILES = new FILES($_FILES);
 // 一覧表示
-$imgList = sqlRead($link);
+$imgList = $link->sqlRead();
 // ボタン送信
 if (isset($_POST['submit'])) {
     //日本語に変更
-    require_once 'model/img/jpEncode.php';
-    $file_name = jpEncode($_FILES['file']['name']);
-    $file_name = $_FILES['file']['name'];
+    $file_name = $FILES->jpEncode();
+    // $file_name = $_FILES['file']['name'];
     // 投稿
-    sqlCreate($link, $_POST['msg'], $file_name);
+    $link->sqlCreate($_POST['msg'], $file_name);
     // ファイルアップロード
-    require_once 'model/img/uploadFile.php';
-    if (uploadFile($file_name)) {
+    if ($FILES->uploadFile()) {
         // サムネイル作成
-        require_once 'model/img/imgCompress.php';
-        imgCompress($file_name);
+        $FILES->imgCompress();
     }
-    header('Location:index.php');
-    exit;
+    // header('Location:index.php');
+    // exit;
 }
 
 require_once 'view/index.php';

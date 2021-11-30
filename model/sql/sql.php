@@ -1,9 +1,8 @@
 <?php
-require_once '../../../../const.php';
-
 // 定数は中でも有効
 /**
- *
+ * クラスCRUD プロパティ DBリンク
+ * @param object $link
  */
 class CRUD{
 
@@ -17,15 +16,19 @@ class CRUD{
             exit('DB接続エラー:' . $err->getMessage());
         }
     }
-    public function getMessage(){
-        return $this->link;
-    }
-    // read
+    /**
+     * read 返り値 m_msgリスト一覧
+     * @return array
+     * */
     public function sqlRead(){
         $pdo = $this->link->query("SELECT * from m_msg");
     return $pdo->fetchAll(PDO::FETCH_NAMED);
     }
-    // create
+    /**
+     * create 引数 一言 ファイル名
+     * @param string $msg
+     * @param string $file_name
+    */
     public function sqlCreate($msg, $file_name)
     {
         $sql = "INSERT INTO m_msg (msg,img) VALUES (:msg,:img)";
@@ -35,11 +38,6 @@ class CRUD{
         $pdo->execute();
     }
 }
-$link = new CRUD();
-var_dump($link);
-var_dump($link->getMessage());
-var_dump($link->sqlRead());
-// var_dump($link->sqlCreate());
 /**
  *sql接続
  返り値 DBリンクobj

@@ -14,7 +14,7 @@
     <header class="ctn py-10 text-4xl">
         <h1 class="font-mono font-size ">課題NO.3</h1>
     </header>
-    <main class="ctn h-screen">
+    <main class="ctn">
         <article class="ctn">
             <h2 class="text-xl pb-5">サムネイル作成</h2>
             <form method="post" enctype="multipart/form-data" class="pb-5">

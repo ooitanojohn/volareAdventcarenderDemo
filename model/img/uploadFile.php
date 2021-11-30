@@ -2,7 +2,7 @@
 
 /**
  * ファイルアップロード
- * 引数 $_FILESの一時保存dir 保存先dir+ファイル保存名
+ * 引数 $_FILESの 一時保存dir 保存先dir+ファイル保存名
  */
 function uploadFile($file_name)
 {

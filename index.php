@@ -32,4 +32,5 @@ if (isset($_POST['submit'])) {
     exit;
 }
 
+require_once 'model/utility/View.php';
 require_once 'view/index.php';

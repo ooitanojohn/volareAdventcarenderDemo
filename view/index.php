@@ -30,9 +30,9 @@
                 <?php foreach ($imgList as $img) : ?>
                     <li class="px-3 pb-3">
                         <div style="width:150px;height:100px;" class="border flx-cen">
-                            <p><img src="img/thumb_<?php echo $img['img'] ?>" alt="写真" height="" width=""></p>
+                            <p><img src="img/thumb_<?php echo escape($img['img']) ?>" alt="写真" height="" width=""></p>
                         </div>
-                        <p class="text-center"><?php echo $img['msg'] ?></p>
+                        <p class="text-center"><?php echo escape($img['msg']) ?></p>
                     </li>
                 <?php endforeach; ?>
             </ul>

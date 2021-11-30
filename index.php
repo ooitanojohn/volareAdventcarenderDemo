@@ -2,7 +2,7 @@
 // 定数
 require_once '../../const.php';
 // sql関連
-require_once 'model/sql/SQL.php';
+require_once 'model/sql/CRUD.php';
 // img関連
 require_once 'model/img/FILES.php';
 require_once 'model/img/IMG.php';

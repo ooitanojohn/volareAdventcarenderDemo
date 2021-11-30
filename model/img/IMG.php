@@ -1,51 +1,35 @@
 <?php
-
 /**
- * _FILES を受け取り　プロパティとして保持
- *@param array $FILES
+ * IMGクラス 基本的には継承で各グローバルクラスから値を
  */
-class FILES{
-    private array $FILES;
-    public function __construct($FILES){
-        $this->FILES = $FILES;
-    }
+class IMG extends FILES{
     /**
-     * ファイルアップロード
-     * 引数 $FILESの 一時保存dir 保存先dir+ファイル保存名
-     * @return boolean
-     */
-    public function uploadFile()
-    {
-        return move_uploaded_file($this->FILES['file']['tmp_name'], 'img/' . $this->FILES['file']['name']);
-    }
-    /**
-     * win sijsにエンコード
-     * 引数 グローバル変数$_FILEの[name],変更先の文字コード,変更元の文字コード
-     * @return string
-     */
-    public function jpEncode()
-    {
-        //日本語に変更
-        return mb_convert_encoding($this->FILES['file']['tmp_name'], 'sjis', 'utf8');
-    }
-
-    /**
-     * サムネイル作成
-     * 引数 ファイル名 , 元画像dir, 保存先dir, 画像サイズ
-     * @return boolean
-     */
-    public function imgCompress()
-    {
-        //◎画像サイズを取得 + dir指定
-        $img_size = getimagesize('img/' . $this->FILES['file']['tmp_name'],);
-        // 圧縮比率 h×w 100:150 + hxw指定
+     *画像サイズ比率計算関数 引数 ファイル名 ※1 ,※2
+    *@param string $file_name
+    *@return array [$img_size,$thumb_width,$thumb_height]
+    */
+    function ImgSize(){
+        //※1 画像サイズを取得 + dir指定
+        $img_size = getimagesize('img/' . $this->FILES['file']['name']);
+        // ※2 圧縮比率 h×w 100:150 + hxw指定
         if ($img_size[1] / 100 > $img_size[0] / 150) {
             $thumb_width = $img_size[0] / ($img_size[1] / 100);
             $thumb_height = $img_size[1] / ($img_size[1] / 100);
+            return [$img_size,intval($thumb_width),intval($thumb_height)];
         } else {
             $thumb_height = $img_size[1] / ($img_size[0] / 150);
             $thumb_width = $img_size[0] / ($img_size[0] / 150);
+            return [$img_size,intval($thumb_width),intval($thumb_height)];
         }
+    }
+    /**
+     * サムネイル作成
+     * 引数 ファイル名 , 元画像dir, 保存先dir, 画像サイズ
+     * @param int $img_size
+     * @param int $thumb_width, $thumb_height
+     */
+    public function imgCompress($img_size,$thumb_width,$thumb_height)
+    {
         // 拡張子によって圧縮方法変更
         $ext = str_replace('image/', '', $_FILES['file']['type']);
         if ($ext === 'jpeg') {
@@ -81,7 +65,7 @@ class FILES{
                 $boolean = Imagepng($img_out, 'img/thumb_' . $this->FILES['file']['name']);
                 break;
             case 'gif':
-                $boolean = Imagegif($img_out, 'img/temp/thumb_' . $this->FILES['file']['name']);
+                $boolean = Imagegif($img_out, 'img/thumb_' . $this->FILES['file']['name']);
                 break;
             default:
                 break;
@@ -92,9 +76,3 @@ class FILES{
         return $boolean;
     }
 }
-
-
-
-
-
-

@@ -16,8 +16,8 @@ $IMG = new IMG($_FILES);
 $imgList = $CRUD->sqlRead();
 // ボタン送信
 if (isset($_POST['submit'])) {
-    //日本語に変更 PDOでは不要
-    //$_FILES['file']['name'] = $IMG->jpEncode();
+    //日本語に変更 DBの文字コード設定が初期cp932の場合
+    // $_FILES['file']['name'] = $IMG->jpEncode();
     // 投稿
     $CRUD->sqlCreate($_POST['msg'], $_FILES['file']['name']);
     // ファイルアップロード

@@ -10,7 +10,7 @@ class CRUD{
     // sql 接続
     public function __construct(){
         try {
-            $link = new PDO('mysql:dbname=' . DB_NAME . ';host=' . HOST .PORT.';charset=utf8', USER_ID, PASSWORD);
+            $link = new PDO('mysql:dbname=' . DB_NAME . ';host=' . HOST .PORT.';charset=utf8mb4', USER_ID, PASSWORD);
             $this->link = $link;
         } catch (PDOException $err) {
             exit('DB接続エラー:' . $err->getMessage());
